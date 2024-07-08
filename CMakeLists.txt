@@ -3,21 +3,21 @@ cmake_minimum_required(VERSION 3.10)
 set(PATCH_VERSION "2" CACHE INTERNAL "Patch version")
 set(PROJECT_VESRION 0.1.${PATCH_VERSION})
 
-project(helloworld VERSION ${PROJECT_VESRION})
+project(matrix_prg VERSION ${PROJECT_VESRION})
 
 find_package(Boost COMPONENTS unit_test_framework REQUIRED)
 
 configure_file(version.h.in version.h)
 
-add_executable(helloworld_cli main.cpp)
-add_library(helloworld lib.cpp)
+add_executable(matrix main.cpp)
+add_library(matrix_prg lib.cpp)
 add_executable(test_version test_version.cpp)
 
-set_target_properties(helloworld_cli helloworld test_version PROPERTIES
-    CXX_STANDARD 14
+set_target_properties(matrix matrix_prg test_version PROPERTIES
+    CXX_STANDARD 17
     CXX_STANDARD_REQUIRED ON
 )
-target_include_directories(helloworld
+target_include_directories(matrix_prg
     PRIVATE "${CMAKE_BINARY_DIR}"
 )
 set_target_properties(test_version PROPERTIES
@@ -25,29 +25,29 @@ set_target_properties(test_version PROPERTIES
     INCLUDE_DIRECTORIES ${Boost_INCLUDE_DIR}
 )
 
-target_link_libraries(helloworld_cli PRIVATE
-    helloworld
+target_link_libraries(matrix PRIVATE
+    matrix_prg
 )
 target_link_libraries(test_version
     ${Boost_LIBRARIES}
-    helloworld
+    matrix_prg
 )
 
 if (MSVC)
-    target_compile_options(helloworld_cli PRIVATE
+    target_compile_options(matrix PRIVATE
         /W4
     )
-    target_compile_options(helloworld PRIVATE
+    target_compile_options(matrix_prg PRIVATE
         /W4
     )
     target_compile_options(test_version PRIVATE
         /W4
     )
 else ()
-    target_compile_options(helloworld_cli PRIVATE
+    target_compile_options(matrix PRIVATE
         -Wall -Wextra -pedantic -Werror
     )
-    target_compile_options(helloworld PRIVATE
+    target_compile_options(matrix_prg PRIVATE
         -Wall -Wextra -pedantic -Werror
     )
     target_compile_options(test_version PRIVATE
@@ -57,7 +57,7 @@ endif()
 
 
 
-install(TARGETS helloworld_cli RUNTIME DESTINATION bin)
+install(TARGETS matrix RUNTIME DESTINATION bin)
 
 set(CPACK_GENERATOR DEB)
 
